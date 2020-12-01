@@ -1,0 +1,161 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "Digital Credentials"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "petstore.swagger.io"
+basePath: "/v2"
+tags:
+- name: "First Application"
+  description: "To be defined"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+- name: "Second Application"
+  description: "To be defined"
+  externalDocs:
+    description: ""
+    url: "http://swagger.io"
+schemes:
+- "https"
+paths:
+  /create-did:
+    post:
+      tags:
+      - "First Application"
+      summary: "Create DID"
+      description: "To be defined"
+      operationId: "createDid"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/VerifiableCredential"
+      responses:
+        default:
+          description: "successful operation"
+  /create-credential:
+    post:
+      tags:
+      - "Second Application"
+      summary: "Create Credential"
+      description: ""
+      operationId: "createCredential"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/VerifiableCredential"
+      responses:
+        default:
+          description: "successful operation"
+  /offered-credentials:
+    get:
+      tags:
+      - "Second Application"
+      summary: "Get all offered credentials by the university"
+      description: ""
+      operationId: "offeredCredentials"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/VerifiableCredential"
+      responses:
+        default:
+          description: "successful operation"
+  /available-credentials:
+    get:
+      tags:
+      - "Second Application"
+      summary: "Get all offered credentials by the university"
+      description: ""
+      operationId: "availableCredentials"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/VerifiableCredential"
+      responses:
+        default:
+          description: "successful operation"
+  /signed-credential:
+    get:
+      tags:
+      - "Second Application"
+      summary: "Get all offered credentials by the university"
+      description: ""
+      operationId: "signedCredential"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: true
+        schema:
+          $ref: "#/definitions/VerifiableCredential"
+      responses:
+        default:
+          description: "successful operation"
+definitions:
+  VerifiableCredential:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      context:
+        type: "string"
+      type:
+        type: "string"
+      issuer:
+        type: "string"
+      issuanceDate:
+        type: "string"
+      credentialSubject:
+        type: "string"
+      proof:
+        type: "string"
+    xml:
+      name: "VerifiableCredential"
+  DidDocument:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      context:
+        type: "string"
+      authentication:
+        type: "string"
+    xml:
+      name: "DidDocument"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
