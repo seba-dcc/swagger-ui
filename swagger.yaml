@@ -37,7 +37,7 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Created user object"
+        description: "Request with Did-ID"
         required: true
         schema:
           $ref: "#/definitions/DidRequest"
@@ -60,7 +60,7 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Created user object"
+        description: "Request with all ids of the credentials needed"
         required: true
         schema:
           $ref: "#/definitions/CredentialRequest"
@@ -68,7 +68,9 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/VerifiableCredential"
+            type: array
+            items:
+               $ref: '#/definitions/VerifiableCredential'
         500:
           description: "internal server error"
   /offered-credentials:
@@ -83,7 +85,7 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Created user object"
+        description: "Student number"
         required: true
         schema:
           $ref: "#/definitions/CredentialOfferedRequest"
@@ -106,7 +108,7 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Created user object"
+        description: "Id of the credential"
         required: true
         schema:
           $ref: "#/definitions/CredentialId"
@@ -115,6 +117,32 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/VerifiableCredential"
+        500:
+          description: "internal server error"
+  /verify-credential:
+    get:
+      tags:
+      - "Second Application"
+      summary: "Get already created credential"
+      description: ""
+      operationId: "verifyCredential"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "VC that needs to be verified"
+        required: true
+        schema:
+          $ref: "#/definitions/VerifiableCredential"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+             type: "object"
+             properties:
+               verified:
+                   type: "boolean"
         500:
           description: "internal server error"
 definitions:
