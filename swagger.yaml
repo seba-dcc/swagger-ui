@@ -51,7 +51,7 @@ paths:
   /create-credential:
     post:
       tags:
-      - "Second Application"
+      - "First Application"
       summary: "Create credential"
       description: ""
       operationId: "createCredential"
@@ -76,7 +76,7 @@ paths:
   /offered-credentials:
     get:
       tags:
-      - "Second Application"
+      - "First Application"
       summary: "Credentials that TUM can issue for the student"
       description: ""
       operationId: "offeredCredentials"
@@ -99,7 +99,7 @@ paths:
   /signed-credential:
     get:
       tags:
-      - "Second Application"
+      - "First Application"
       summary: "Get already created credential"
       description: ""
       operationId: "signedCredential"
@@ -123,7 +123,7 @@ paths:
     get:
       tags:
       - "Second Application"
-      summary: "Get already created credential"
+      summary: "Verify a VC"
       description: ""
       operationId: "verifyCredential"
       produces:
