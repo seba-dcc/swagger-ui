@@ -63,7 +63,9 @@ paths:
         description: "Request with all ids of the credentials needed"
         required: true
         schema:
-          $ref: "#/definitions/CredentialRequest"
+          type: array
+          items: 
+            $ref: "#/definitions/CredentialRequest"
       responses:
         200:
           description: "successful operation"
@@ -184,11 +186,9 @@ definitions:
   CredentialRequest:
     type: "object"
     properties:
-      did:
-        type: "string"
-      credential-ids:
-        type: "array"
-        items:
+      credential-subject:
+          type: "string"
+      credential-id:
           type: "string"
     xml:
       name: "CredentialRequest"
