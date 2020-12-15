@@ -12,35 +12,35 @@ info:
 host: "seba-dcc.github.io"
 basePath: "/swagger-ui/"
 tags:
-- name: "First Application"
-  description: "To be defined"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
-- name: "Second Application"
-  description: "To be defined"
-  externalDocs:
-    description: ""
-    url: "http://swagger.io"
+  - name: "First Application"
+    description: "To be defined"
+    externalDocs:
+      description: "Find out more"
+      url: "http://swagger.io"
+  - name: "Second Application"
+    description: "To be defined"
+    externalDocs:
+      description: ""
+      url: "http://swagger.io"
 schemes:
-- "https"
+  - "https"
 paths:
   /create-did:
     post:
       tags:
-      - "First Application"
+        - "First Application"
       summary: "Create DID for university"
       description: "To be defined"
       operationId: "createDid"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Request with Did-ID"
-        required: true
-        schema:
-          $ref: "#/definitions/DidRequest"
+        - in: "body"
+          name: "body"
+          description: "Request with Did-ID"
+          required: true
+          schema:
+            $ref: "#/definitions/DidRequest"
       responses:
         200:
           description: "successful operation"
@@ -51,46 +51,46 @@ paths:
   /create-credential:
     post:
       tags:
-      - "First Application"
+        - "First Application"
       summary: "Create credential"
       description: ""
       operationId: "createCredential"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Request with all ids of the credentials needed"
-        required: true
-        schema:
-          type: array
-          items: 
-            $ref: "#/definitions/CredentialRequest"
+        - in: "body"
+          name: "body"
+          description: "Request with all ids of the credentials needed"
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/CredentialRequest"
       responses:
         200:
           description: "successful operation"
           schema:
             type: array
             items:
-               $ref: '#/definitions/VerifiableCredential'
+              $ref: "#/definitions/VerifiableCredential"
         500:
           description: "internal server error"
   /offered-credentials:
     get:
       tags:
-      - "First Application"
+        - "First Application"
       summary: "Credentials that TUM can issue for the student"
       description: ""
       operationId: "offeredCredentials"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Student number"
-        required: true
-        schema:
-          $ref: "#/definitions/CredentialOfferedRequest"
+        - in: "body"
+          name: "body"
+          description: "Student number"
+          required: true
+          schema:
+            $ref: "#/definitions/CredentialOfferedRequest"
       responses:
         200:
           description: "successful operation"
@@ -101,19 +101,19 @@ paths:
   /signed-credential:
     get:
       tags:
-      - "First Application"
+        - "First Application"
       summary: "Get already created credential"
       description: ""
       operationId: "signedCredential"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Id of the credential"
-        required: true
-        schema:
-          $ref: "#/definitions/CredentialId"
+        - in: "body"
+          name: "body"
+          description: "Id of the credential"
+          required: true
+          schema:
+            $ref: "#/definitions/CredentialId"
       responses:
         200:
           description: "successful operation"
@@ -124,27 +124,27 @@ paths:
   /verify-credential:
     get:
       tags:
-      - "Second Application"
+        - "Second Application"
       summary: "Verify a VC"
       description: ""
       operationId: "verifyCredential"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "VC that needs to be verified"
-        required: true
-        schema:
-          $ref: "#/definitions/VerifiableCredential"
+        - in: "body"
+          name: "body"
+          description: "VC that needs to be verified"
+          required: true
+          schema:
+            $ref: "#/definitions/VerifiableCredential"
       responses:
         200:
           description: "successful operation"
           schema:
-             type: "object"
-             properties:
-               verified:
-                   type: "boolean"
+            type: "object"
+            properties:
+              verified:
+                type: "boolean"
         500:
           description: "internal server error"
 definitions:
@@ -174,22 +174,69 @@ definitions:
         type: "string"
       address:
         type: "string"
+      didDocument:
+        type: "object"
+        properties:
+          "@context":
+            type: "string"
+          id:
+            type: "string"
+          service:
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                id:
+                  type: "string"
+                type:
+                  type: "string"
+                serviceEndpoint:
+                  type: "string"
+          assertionMethod:
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                id:
+                  type: "string"
+                type:
+                  type: "string"
+                controller:
+                  type: "string"
+                publicKeyBase58:
+                  type: "string"
+    example:
+      id: "did:tls:tum.de"
+      address: "0x492140a461075F183556A6C9f718DF6e4df2f977"
+      didDocument:
+        "@context": "https://www.w3.org/ns/did/v1"
+        id: "did:tls:tum.de"
+        service:
+          - id: "did:tls:tum.de#vcs"
+            type: "VerifiableCredentialService"
+            serviceEndpoint: "http://localhost:9004"
+        assertionMethod:
+          - id: "did:tls:tum.de#keys-1"
+            type: "Ed25519VerificationKey2018"
+            controller: "did:tls:tum.de"
+            publicKeyBase58: "E4tGev3GUgzsXZ6sJpSa259Y16gmW6zpNHESTtJGvVCb"
     xml:
       name: "DidResponse"
   DidRequest:
     type: "object"
     properties:
-      tls-key:
+      domain:
         type: "string"
+        example: "tum.de"
     xml:
       name: "DidRequest"
   CredentialRequest:
     type: "object"
     properties:
       credential-subject:
-          type: "string"
+        type: "string"
       credential-id:
-          type: "string"
+        type: "string"
     xml:
       name: "CredentialRequest"
   CredentialOfferedRequest:
@@ -212,7 +259,7 @@ definitions:
     type: "object"
     properties:
       credential-id:
-          type: "string"
+        type: "string"
     xml:
       name: "CredentialId"
 externalDocs:
