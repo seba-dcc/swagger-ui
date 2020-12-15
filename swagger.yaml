@@ -12,24 +12,16 @@ info:
 host: "seba-dcc.github.io"
 basePath: "/swagger-ui/"
 tags:
-  - name: "First Application"
-    description: "To be defined"
-    externalDocs:
-      description: "Find out more"
-      url: "http://swagger.io"
-  - name: "Second Application"
-    description: "To be defined"
-    externalDocs:
-      description: ""
-      url: "http://swagger.io"
+  - name: "TUM Signing Server / Issuer API"
+  - name: "Verifier API"
 schemes:
   - "https"
 paths:
   /create-did:
     post:
       tags:
-        - "First Application"
-      summary: "Create DID for university"
+        - "TUM Signing Server / Issuer API"
+      summary: "Create DID for university / institutes"
       description: "To be defined"
       operationId: "createDid"
       produces:
@@ -51,7 +43,7 @@ paths:
   /create-credential:
     post:
       tags:
-        - "First Application"
+        - "TUM Signing Server / Issuer API"
       summary: "Create credential"
       description: ""
       operationId: "createCredential"
@@ -63,9 +55,7 @@ paths:
           description: "Request with all ids of the credentials needed"
           required: true
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/CredentialRequest"
+            $ref: "#/definitions/CredentialRequest"
       responses:
         200:
           description: "successful operation"
@@ -78,7 +68,7 @@ paths:
   /offered-credentials:
     get:
       tags:
-        - "First Application"
+        - "TUM Signing Server / Issuer API"
       summary: "Credentials that TUM can issue for the student"
       description: ""
       operationId: "offeredCredentials"
@@ -101,7 +91,7 @@ paths:
   /signed-credential:
     get:
       tags:
-        - "First Application"
+        - "TUM Signing Server / Issuer API"
       summary: "Get already created credential"
       description: ""
       operationId: "signedCredential"
@@ -124,7 +114,7 @@ paths:
   /verify-credential:
     get:
       tags:
-        - "Second Application"
+        - "Verifier API"
       summary: "Verify a VC"
       description: ""
       operationId: "verifyCredential"
@@ -172,14 +162,17 @@ definitions:
           - "DegreeCredential"
       issuer:
         type: "string"
-        example: "https://example.edu/issuers/565049"
+        example: "did:tls:tum.de"
       issuanceDate:
         type: "string"
         example: "2010-01-01T19:23:24Z"
       credentialSubject:
         type: "object"
         example: {
-            "alumniOf": "Technische Universität München"
+          "did": "eth:did:sdhed545l",
+          "alumniOf": "Technische Universität München",
+          "grade": "1,0",
+          "degreeType": "bachelor"
         }
       proof:
         type: "object"
@@ -266,10 +259,32 @@ definitions:
   CredentialRequest:
     type: "object"
     properties:
-      credential-subject:
+      domain:
         type: "string"
-      credential-id:
-        type: "string"
+        example: "tum.de"
+      requestedCredentials:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            credentialType:
+              type: "string"
+              example: "degree"
+            credentialSubject:
+              type: "object"
+              properties:
+                did:
+                  type: "string"
+                  example: "eth:did:sdhed545l"
+                alumniOf:
+                  type: "string"
+                  example: "Technische Universität München"
+                grade:
+                  type: "number"
+                  example: 1,0
+                degreeType:
+                  type: "string"
+                  example: "bachelor"
     xml:
       name: "CredentialRequest"
   CredentialOfferedRequest:
