@@ -147,26 +147,59 @@ paths:
                 type: "boolean"
         500:
           description: "internal server error"
+          schema:
+            $ref: "#/definitions/verifyCredentialError"
 definitions:
   VerifiableCredential:
     type: "object"
     properties:
       id:
         type: "string"
+        example: "https://example.com/credentials/1872"
       context:
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        example:
+          - "https://www.w3.org/2018/credentials/v1"
+          - "https://www.w3.org/2018/credentials/examples/v1"
       type:
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        example: 
+          - "VerifiableCredential"
+          - "DegreeCredential"
       issuer:
         type: "string"
+        example: "https://example.edu/issuers/565049"
       issuanceDate:
         type: "string"
+        example: "2010-01-01T19:23:24Z"
       credentialSubject:
-        type: "string"
+        type: "object"
+        example: {
+            "alumniOf": "Technische Universität München"
+        }
       proof:
-        type: "string"
+        type: "object"
+        example:
+          - type: Ed25519Signature2018
+            created: '2020-12-15T11:07:10Z'
+            jws: eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..kSp-z5 -cU3mxdJUJaDX_5xOHGF66nd2X9wdAisKMNH1OIlueXcKjO6TFDKrNHa3PIyRZMaTQ6TtZgIQ0mx7YAg
+            proofPurpose: assertionMethod
+            verificationMethod: 'did:tum'
     xml:
       name: "VerifiableCredential"
+  verifyCredentialError:
+    type: "object"
+    properties:
+      valid:
+        type: "boolean"
+        example: false
+      error:
+        type: "string"
+        example: "Proof Missing in the Credential"
   DidResponse:
     type: "object"
     properties:
