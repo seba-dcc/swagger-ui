@@ -112,21 +112,22 @@ paths:
         500:
           description: "internal server error"
   /verify-credential:
-    get:
+    post:
       tags:
         - "Verifier API"
       summary: "Verify a VC"
       description: ""
       operationId: "verifyCredential"
+      consumes:
+        - "multipart/form-data"
       produces:
         - "application/json"
       parameters:
-        - in: "body"
-          name: "body"
+        - in: "formData"
+          name: "vc"
+          type: "file"
           description: "VC that needs to be verified"
           required: true
-          schema:
-            $ref: "#/definitions/VerifiableCredential"
       responses:
         200:
           description: "successful operation"
