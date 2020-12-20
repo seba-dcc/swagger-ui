@@ -12,24 +12,16 @@ info:
 host: "seba-dcc.github.io"
 basePath: "/swagger-ui/"
 tags:
-  - name: "First Application"
-    description: "To be defined"
-    externalDocs:
-      description: "Find out more"
-      url: "http://swagger.io"
-  - name: "Second Application"
-    description: "To be defined"
-    externalDocs:
-      description: ""
-      url: "http://swagger.io"
+  - name: "TUM Signing Server / Issuer API"
+  - name: "Verifier API"
 schemes:
   - "https"
 paths:
   /create-did:
     post:
       tags:
-        - "First Application"
-      summary: "Create DID for university"
+        - "TUM Signing Server / Issuer API"
+      summary: "Create DID for university / institutes"
       description: "To be defined"
       operationId: "createDid"
       produces:
@@ -46,12 +38,14 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/DidResponse"
+        204:
+          description: "Domain already exists"
         500:
           description: "internal server error"
   /create-credential:
     post:
       tags:
-        - "First Application"
+        - "TUM Signing Server / Issuer API"
       summary: "Create credential"
       description: ""
       operationId: "createCredential"
@@ -63,9 +57,7 @@ paths:
           description: "Request with all ids of the credentials needed"
           required: true
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/CredentialRequest"
+            $ref: "#/definitions/CredentialRequest"
       responses:
         200:
           description: "successful operation"
@@ -78,7 +70,7 @@ paths:
   /offered-credentials:
     get:
       tags:
-        - "First Application"
+        - "TUM Signing Server / Issuer API"
       summary: "Credentials that TUM can issue for the student"
       description: ""
       operationId: "offeredCredentials"
@@ -101,7 +93,7 @@ paths:
   /signed-credential:
     get:
       tags:
-        - "First Application"
+        - "TUM Signing Server / Issuer API"
       summary: "Get already created credential"
       description: ""
       operationId: "signedCredential"
@@ -122,21 +114,22 @@ paths:
         500:
           description: "internal server error"
   /verify-credential:
-    get:
+    post:
       tags:
-        - "Second Application"
+        - "Verifier API"
       summary: "Verify a VC"
       description: ""
       operationId: "verifyCredential"
+      consumes:
+        - "multipart/form-data"
       produces:
         - "application/json"
       parameters:
-        - in: "body"
-          name: "body"
+        - in: "formData"
+          name: "vc"
+          type: "file"
           description: "VC that needs to be verified"
           required: true
-          schema:
-            $ref: "#/definitions/VerifiableCredential"
       responses:
         200:
           description: "successful operation"
@@ -147,26 +140,62 @@ paths:
                 type: "boolean"
         500:
           description: "internal server error"
+          schema:
+            $ref: "#/definitions/verifyCredentialError"
 definitions:
   VerifiableCredential:
     type: "object"
     properties:
       id:
         type: "string"
+        example: "https://example.com/credentials/1872"
       context:
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        example:
+          - "https://www.w3.org/2018/credentials/v1"
+          - "https://www.w3.org/2018/credentials/examples/v1"
       type:
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        example:
+          - "VerifiableCredential"
+          - "DegreeCredential"
       issuer:
         type: "string"
+        example: "did:tls:tum.de"
       issuanceDate:
         type: "string"
+        example: "2010-01-01T19:23:24Z"
       credentialSubject:
-        type: "string"
+        type: "object"
+        example: {
+          "did": "eth:did:sdhed545l",
+          "alumniOf": "Technische Universität München",
+          "grade": "1,0",
+          "degreeType": "bachelor"
+        }
       proof:
-        type: "string"
+        type: "object"
+        example:
+          - type: Ed25519Signature2018
+            created: '2020-12-15T11:07:10Z'
+            jws: eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..kSp-z5 -cU3mxdJUJaDX_5xOHGF66nd2X9wdAisKMNH1OIlueXcKjO6TFDKrNHa3PIyRZMaTQ6TtZgIQ0mx7YAg
+            proofPurpose: assertionMethod
+            verificationMethod: 'did:tum'
     xml:
       name: "VerifiableCredential"
+  verifyCredentialError:
+    type: "object"
+    properties:
+      valid:
+        type: "boolean"
+        example: false
+      error:
+        type: "string"
+        example: "Proof Missing in the Credential"
   DidResponse:
     type: "object"
     properties:
@@ -233,10 +262,32 @@ definitions:
   CredentialRequest:
     type: "object"
     properties:
-      credential-subject:
+      domain:
         type: "string"
-      credential-id:
-        type: "string"
+        example: "tum.de"
+      requestedCredentials:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            credentialType:
+              type: "string"
+              example: "degree"
+            credentialSubject:
+              type: "object"
+              properties:
+                did:
+                  type: "string"
+                  example: "eth:did:sdhed545l"
+                alumniOf:
+                  type: "string"
+                  example: "Technische Universität München"
+                grade:
+                  type: "number"
+                  example: 1,0
+                degreeType:
+                  type: "string"
+                  example: "bachelor"
     xml:
       name: "CredentialRequest"
   CredentialOfferedRequest:
