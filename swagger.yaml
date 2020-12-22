@@ -293,14 +293,14 @@ definitions:
   CredentialOfferedRequest:
     type: "object"
     properties:
-      mat-num:
+      matNum:
         type: "string"
     xml:
       name: "CredentialOfferedRequest"
   CredentialsResponse:
     type: "object"
     properties:
-      credential-ids:
+      credentialTypes:
         type: "array"
         items:
           type: "string"
