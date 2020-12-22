@@ -9,31 +9,40 @@
 
 ## Digital Credentials Consortium
 
-The Digital Credentials Consortium (DCC) is a consortium led by the Massachusetts Institute of Technology (MIT), in which also the Technical University of Munich (TUM) contributes. The goal is "building an infrastructure for digital academic credentials that can support the education systems of the future" [https://digitalcredentials.mit.edu/].
+The Digital Credentials Consortium (DCC) is a consortium led by the Massachusetts Institute of Technology (MIT), to which also the Technical University of Munich (TUM) contributes. The goal is "building an infrastructure for digital academic credentials that can support the education systems of the future" [https://digitalcredentials.mit.edu/].
 
 This infrastructure is supposed to increase the efficiency of exchanging and evaluating credentials, provide more reliable ways to protect and verify the credentials, thereby reducing the opportunity for fraud, and expand learner's control over their credentials.
 
 The consortium has released a white paper that describes the features and components of such a system in detail: https://digitalcredentials.mit.edu/wp-content/uploads/2020/02/white-paper-building-digital-credential-infrastructure-future.pdf
 
-As an analogy, a digital credential like a graduation certificate can be imagined as a document within an envelope. The document contains all the relevant information of the credential. The envelope ensures integrity and authenticity of the document. The consortium focuses on the envelope using the concept of Distributed Identifiers (DID) and Verifiable Credentials (VC).
+In short, as an analogy, a digital credential like a graduation certificate can be imagined as a document within an envelope. The document contains all the relevant information of the credential. The envelope ensures integrity and authenticity of the document. The consortium focuses on the envelope using the concepts of Distributed Identifiers (DID) and Verifiable Credentials (VC).
 
 ## DID
 
-W3C Working Draft 20 December 2020: https://www.w3.org/TR/did-core/
+> Decentralized identifiers (DIDs) are a new type of identifier that enables verifiable, decentralized digital identity. A DID identifies any subject (e.g., a person, organization, thing, data model, abstract entity, etc.) that the controller of the DID decides that it identifies. In contrast to typical, federated identifiers, DIDs have been designed so that they may be decoupled from centralized registries, identity providers, and certificate authorities. [...] DIDs are URIs that associate a DID subject with a DID document allowing trustable interactions associated with that subject.
+> Each DID document can express cryptographic material, verification methods, or service endpoints, which provide a set of mechanisms enabling a DID controller to prove control of the DID.
+
+_W3C Working Draft 20 December 2020: https://www.w3.org/TR/did-core/_
 
 ## Verifiable Credential
 
-W3C Recommendation 19 November 2019: https://www.w3.org/TR/vc-data-model/
+> Credentials are a part of our daily lives; driver's licenses are used to assert that we are capable of operating a motor vehicle, university degrees can be used to assert our level of education, and government-issued passports enable us to travel between countries. These credentials provide benefits to us when used in the physical world, but their use on the Web continues to be elusive. Currently it is difficult to express education qualifications, healthcare data, financial account details, and other sorts of third-party verified machine-readable personal information on the Web. [...] [The VC] specification provides a standard way to express credentials on the Web in a way that is cryptographically secure, privacy respecting, and machine-verifiable.
+
+_W3C Recommendation 19 November 2019: https://www.w3.org/TR/vc-data-model/_
+
+Typically DIDs are used in VCs as identifiers to unambiguously refer to the object, such as a person, product, or organization by and for which the VCs are issued.
 
 ## This Project
 
-The TUM contributes to the DCC by developing an implementation of DIDs using the existing public key infrastructure of TLS certificates for verification of ownership of a DID. For instance, it is verified that a DID for the domain tum.de actually belongs to the TUM by the TLS infrastructure. Thus, it is possible to ensure, that a VC issued by this DID was actually issued by the TUM.
+The TUM contributes to the DCC by developing an implementation of DIDs using the existing public key infrastructure of TLS certificates for verification of ownership of a DID. For instance, it is verified that a DID for the domain tum.de actually belongs to the TUM. Thus, it is possible to ensure, that a VC issued by this DID was actually issued by the TUM.
 
 Our project is a case within the SEBA Lab Course of the TUM's Software Engineering for Business Information Systems (sebis) chair. The case is about developing a proof of concept of TLS DIDs for the chair. In the end, the proof of concept is supposed to showcase the process of issuing and verifying VCs based on TLS DIDs.
 
 We are Julian Baumann (ge54jaf@mytum.de), Micha Lutz (micha.lutz@tum.de), Riccardo Pagliuca (ge35seq@mytum.de) and Moritz Schindelmann (ge35sub@mytum.de), all Master students at the TUM's Department of Informatics.
 
 # Actors
+
+Following, the three roles in our proof of concept are described.
 
 An issuer is a university that issues a VC to a student. An issuer typically runs a Campus Management System (CAMS) that manages the students, their courses and certificates.
 
