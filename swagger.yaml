@@ -29,19 +29,19 @@ paths:
       parameters:
         - in: "body"
           name: "body"
-          description: "Request with Did-ID"
+          description: "Request with domain"
           required: true
           schema:
             $ref: "#/definitions/DidRequest"
       responses:
         200:
-          description: "successful operation"
+          description: "Successful operation - shows the DID-id, adress on the blockchain, DID-document and the public key of the DID"
           schema:
             $ref: "#/definitions/DidResponse"
         204:
           description: "Domain already exists"
         500:
-          description: "internal server error"
+          description: "Internal server error"
   /create-credential:
     post:
       tags:
@@ -54,19 +54,19 @@ paths:
       parameters:
         - in: "body"
           name: "body"
-          description: "Request with all ids of the credentials needed"
+          description: "Request that shows the DID-domain that issues the credential. The credentialType defines what kind of credential is issued. The credentialSubject is the part that will be verified by the credential."
           required: true
           schema:
             $ref: "#/definitions/CredentialRequest"
       responses:
         200:
-          description: "successful operation"
+          description: "Successful operation - will return a set of credentials with the proof that was created."
           schema:
             type: array
             items:
               $ref: "#/definitions/VerifiableCredential"
         500:
-          description: "internal server error"
+          description: "Internal server error"
   /offered-credentials:
     get:
       tags:
@@ -79,17 +79,17 @@ paths:
       parameters:
         - in: "body"
           name: "body"
-          description: "Student number"
+          description: "Stundent number"
           required: true
           schema:
             $ref: "#/definitions/CredentialOfferedRequest"
       responses:
         200:
-          description: "successful operation"
+          description: "Successful operation - shows all the credentialTypes that could be issued"
           schema:
             $ref: "#/definitions/CredentialsResponse"
         500:
-          description: "internal server error"
+          description: "Internal server error"
   /signed-credential:
     get:
       tags:
@@ -102,17 +102,17 @@ paths:
       parameters:
         - in: "body"
           name: "body"
-          description: "Id of the credential"
+          description: "ID of the credential that is already created."
           required: true
           schema:
             $ref: "#/definitions/CredentialId"
       responses:
         200:
-          description: "successful operation"
+          description: "Successful operation - returns the credential with the requested ID"
           schema:
             $ref: "#/definitions/VerifiableCredential"
         500:
-          description: "internal server error"
+          description: "Internal server error"
   /verify-credential:
     post:
       tags:
@@ -132,14 +132,14 @@ paths:
           required: true
       responses:
         200:
-          description: "successful operation"
+          description: "Successful operation - will return true or false depending if the credential is verified"
           schema:
             type: "object"
             properties:
               verified:
                 type: "boolean"
         500:
-          description: "internal server error"
+          description: "Internal server error"
           schema:
             $ref: "#/definitions/verifyCredentialError"
 definitions:
@@ -293,14 +293,14 @@ definitions:
   CredentialOfferedRequest:
     type: "object"
     properties:
-      mat-num:
+      matNum:
         type: "string"
     xml:
       name: "CredentialOfferedRequest"
   CredentialsResponse:
     type: "object"
     properties:
-      credential-ids:
+      credentialTypes:
         type: "array"
         items:
           type: "string"
