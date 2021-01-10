@@ -76,13 +76,6 @@ paths:
       operationId: "offeredCredentials"
       produces:
         - "application/json"
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "Stundent number"
-          required: true
-          schema:
-            $ref: "#/definitions/CredentialOfferedRequest"
       responses:
         200:
           description: "Successful operation - shows all the credentialTypes that could be issued"
@@ -90,7 +83,7 @@ paths:
             $ref: "#/definitions/CredentialsResponse"
         500:
           description: "Internal server error"
-  /signed-credential:
+  /signed-credentials{credentialId}:
     get:
       tags:
         - "TUM Signing Server / Issuer API"
@@ -100,17 +93,40 @@ paths:
       produces:
         - "application/json"
       parameters:
-        - in: "body"
-          name: "body"
-          description: "ID of the credential that is already created."
+        - in: "path"
+          name: "credentialId"
+          type: "string"
           required: true
-          schema:
-            $ref: "#/definitions/CredentialId"
+          description: "ID of the credential that is already created."
       responses:
         200:
           description: "Successful operation - returns the credential with the requested ID"
           schema:
             $ref: "#/definitions/VerifiableCredential"
+        500:
+          description: "Internal server error"
+  /credentials-for-student{matNum}:
+    get:
+      tags:
+        - "TUM Signing Server / Issuer API"
+      summary: "Get all signed credentials for student number"
+      description: ""
+      operationId: "credentialsForStudent"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "matNum"
+          type: "string"
+          required: true
+          description: "Student number."
+      responses:
+        200:
+          description: "Successful operation - returns all signed credentials"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/VerifiableCredential"
         500:
           description: "Internal server error"
   /verify-credential:
@@ -265,6 +281,9 @@ definitions:
       domain:
         type: "string"
         example: "tum.de"
+      matNum:
+        type: "string"
+        example: "123456"
       requestedCredentials:
         type: "array"
         items:
@@ -290,20 +309,48 @@ definitions:
                   example: "bachelor"
     xml:
       name: "CredentialRequest"
-  CredentialOfferedRequest:
-    type: "object"
-    properties:
-      matNum:
-        type: "string"
-    xml:
-      name: "CredentialOfferedRequest"
   CredentialsResponse:
-    type: "object"
-    properties:
-      credentialTypes:
-        type: "array"
-        items:
+    type: array
+    items:
+      type: "object"
+      properties:
+        _id:
           type: "string"
+          example: "5ffadd9f553909d75cd3006f"
+        type:
+          type: "string"
+          example: "degree"
+        name: 
+          type: "string"
+          example: "Bachelor's Degree"
+        requiredSubjects: 
+          type: "object"
+          properties:
+            key: 
+              type: "string"
+              example: "familyName"
+            value: 
+              type: "string"
+              example: "Meier"
+            name: 
+              type: "string"
+              example: "Family Name"
+        optionalSubjects: 
+          type: "object"
+          properties:
+            key: 
+              type: "string"
+              example: "grade"
+            value: 
+              type: "string"
+              example: "1.0"
+            name: 
+              type: "string"
+              example: "Grade"
+        credentialBody:
+          type: "array"
+          items:
+            $ref: "#/definitions/VerifiableCredential"
     xml:
       name: "CredentialsResponse"
   CredentialId:
