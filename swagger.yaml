@@ -17,31 +17,6 @@ tags:
 schemes:
   - "https"
 paths:
-  /create-did:
-    post:
-      tags:
-        - "TUM Signing Server / Issuer API"
-      summary: "Create DID for university / institutes"
-      description: "To be defined"
-      operationId: "createDid"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "Request with domain"
-          required: true
-          schema:
-            $ref: "#/definitions/DidRequest"
-      responses:
-        200:
-          description: "Successful operation - shows the DID-id, adress on the blockchain, DID-document and the public key of the DID"
-          schema:
-            $ref: "#/definitions/DidResponse"
-        204:
-          description: "Domain already exists"
-        500:
-          description: "Internal server error"
   /create-credential:
     post:
       tags:
@@ -83,7 +58,7 @@ paths:
             $ref: "#/definitions/CredentialsResponse"
         500:
           description: "Internal server error"
-  /signed-credentials{credentialId}:
+  /signed-credentials/{credentialId}:
     get:
       tags:
         - "TUM Signing Server / Issuer API"
@@ -105,7 +80,7 @@ paths:
             $ref: "#/definitions/VerifiableCredential"
         500:
           description: "Internal server error"
-  /credentials-for-student{matNum}:
+  /credentials-for-student/{matNum}:
     get:
       tags:
         - "TUM Signing Server / Issuer API"
@@ -188,7 +163,6 @@ definitions:
       credentialSubject:
         type: "object"
         example: {
-          "did": "eth:did:sdhed545l",
           "alumniOf": "Technische Universität München",
           "grade": "1,0",
           "degreeType": "bachelor"
@@ -262,19 +236,10 @@ definitions:
             serviceEndpoint: "http://localhost:9004"
         assertionMethod:
           - id: "did:tls:tum.de#keys-1"
-            type: "Ed25519VerificationKey2018"
             controller: "did:tls:tum.de"
             publicKeyBase58: "E4tGev3GUgzsXZ6sJpSa259Y16gmW6zpNHESTtJGvVCb"
     xml:
       name: "DidResponse"
-  DidRequest:
-    type: "object"
-    properties:
-      domain:
-        type: "string"
-        example: "tum.de"
-    xml:
-      name: "DidRequest"
   CredentialRequest:
     type: "object"
     properties:
@@ -284,29 +249,27 @@ definitions:
       matNum:
         type: "string"
         example: "123456"
-      requestedCredentials:
-        type: "array"
-        items:
-          type: "object"
-          properties:
-            credentialType:
-              type: "string"
-              example: "degree"
-            credentialSubject:
-              type: "object"
-              properties:
-                did:
-                  type: "string"
-                  example: "eth:did:sdhed545l"
-                alumniOf:
-                  type: "string"
-                  example: "Technische Universität München"
-                grade:
-                  type: "number"
-                  example: 1,0
-                degreeType:
-                  type: "string"
-                  example: "bachelor"
+      credentialType:
+        type: "string"
+        example: "degree"
+      credentialSubject:
+        type: "object"
+        properties:
+          givenName: 
+            type: "string"
+            example: "Michael"
+          familyName:
+            type: "string"
+            example: "Meier"
+          dateOfBirth:
+            type: "string"
+            example: "01.01.2000"
+          alumniOf:
+            type: "string"
+            example: "TU München"
+          degreeProgramme:
+            type: "string"
+            example: "Information Systems"
     xml:
       name: "CredentialRequest"
   CredentialsResponse:
@@ -323,30 +286,16 @@ definitions:
         name: 
           type: "string"
           example: "Bachelor's Degree"
-        requiredSubjects: 
-          type: "object"
-          properties:
-            key: 
-              type: "string"
-              example: "familyName"
-            value: 
-              type: "string"
-              example: "Meier"
-            name: 
-              type: "string"
-              example: "Family Name"
-        optionalSubjects: 
-          type: "object"
-          properties:
-            key: 
-              type: "string"
-              example: "grade"
-            value: 
-              type: "string"
-              example: "1.0"
-            name: 
-              type: "string"
-              example: "Grade"
+        requiredSubjectProperties: 
+          type: "array"
+          items:
+            type: "string"
+            example: "givenName"
+        optionalSubjectProperties: 
+          type: "array"
+          items:
+            type: "string"
+            example: "grade"
         credentialBody:
           type: "array"
           items:
