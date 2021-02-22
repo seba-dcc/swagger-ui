@@ -131,5 +131,5 @@ The endpoint request expects the verifiable credential file. Additionally it req
 
 The endpoint returns whether the verifiable credential is valid or not. For this purpose, the issuer's DID document is resolved from the blockchain and following information is validated:
 
-- Integritiy of the content of the verifiable credential by resolving its signature with the public key from the issuer's DID document and comparing it against the actual content of the verifiable credential
-- _to be extended_
+- Integrity of the content of the verifiable credential by resolving its signature with the public key from the issuer's DID document and comparing it against the actual content of the verifiable credential
+- Conformity to the context. It is important to know which is the context that the VC uses. A document loader checks all the used contexts and checks for the conformity.
