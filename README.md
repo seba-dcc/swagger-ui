@@ -111,8 +111,6 @@ The endpoint stores the DID document in the DID registry on the blockchain and a
 
 The respective public-private key pair is generated while creating the DID. The private key is kept secret and stored locally.
 
-_... details about TLS DID ? ..._
-
 ## Issuing Scenario: Create Credential
 
 Issuers can create a verifiable credential for a specific certificate by calling the Issuer API `/create-credential` endpoint from their CAMS.
