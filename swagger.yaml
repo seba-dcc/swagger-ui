@@ -1,314 +1,426 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  description: ""
-  version: "1.0.0"
-  title: "Digital Credentials"
-  termsOfService: "http://swagger.io/terms/"
+  description: ''
+  version: 1.0.0
+  title: Digital Credentials
+  termsOfService: 'http://swagger.io/terms/'
   contact:
-    email: "apiteam@swagger.io"
+    email: apiteam@swagger.io
   license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "seba-dcc.github.io"
-basePath: "/swagger-ui/"
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: seba-dcc.github.io
+basePath: /swagger-ui/
 tags:
-  - name: "TUM Signing Server / Issuer API"
-  - name: "Verifier API"
+  - name: TUM Signing Server / Issuer API
+  - name: Verifier API
 schemes:
-  - "https"
+  - https
 paths:
   /create-credential:
     post:
       tags:
-        - "TUM Signing Server / Issuer API"
-      summary: "Create credential"
-      description: ""
-      operationId: "createCredential"
+        - TUM Signing Server / Issuer API
+      summary: Create signed credential
+      description: ''
+      operationId: createCredential
       produces:
-        - "application/json"
+        - application/json
       parameters:
-        - in: "body"
-          name: "body"
-          description: "Request that shows the DID-domain that issues the credential. The credentialType defines what kind of credential is issued. The credentialSubject is the part that will be verified by the credential."
+        - in: body
+          name: body
+          description: >-
+            Request that shows the DID-domain that issues the credential. The
+            credentialType defines what kind of credential is issued. The
+            credentialSubject is the part that will be verified by the
+            credential.
           required: true
           schema:
-            $ref: "#/definitions/CredentialRequest"
+            $ref: '#/definitions/CredentialRequest'
       responses:
-        200:
-          description: "Successful operation - will return a set of credentials with the proof that was created."
+        '200':
+          description: >-
+            Successful operation - will return a set of credentials with the
+            proof that was created.
           schema:
             type: array
             items:
-              $ref: "#/definitions/VerifiableCredential"
-        500:
-          description: "Internal server error"
+              $ref: '#/definitions/VerifiableCredential'
+        '500':
+          description: Internal server error
+  /offered-credential:
+    get:
+      tags:
+        - TUM Signing Server / Issuer API
+      summary: Get specific unsigned credential
+      description: ''
+      operationId: offeredCredential
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: credentialType
+          type: string
+          required: true
+          description: Type of the credential
+      responses:
+        '200':
+          description: >-
+            Successful operation - shows all the credentialTypes that could be
+            issued
+          schema:
+            $ref: '#/definitions/SingleCredentialResponse'
+        '500':
+          description: Internal server error
   /offered-credentials:
     get:
       tags:
-        - "TUM Signing Server / Issuer API"
-      summary: "Credentials that TUM can issue for the student"
-      description: ""
-      operationId: "offeredCredentials"
+        - TUM Signing Server / Issuer API
+      summary: Get all credentials that TUM can issue for the student
+      description: ''
+      operationId: offeredCredentials
       produces:
-        - "application/json"
+        - application/json
       responses:
-        200:
-          description: "Successful operation - shows all the credentialTypes that could be issued"
+        '200':
+          description: >-
+            Successful operation - shows all the credentialTypes that could be
+            issued
           schema:
-            $ref: "#/definitions/CredentialsResponse"
-        500:
-          description: "Internal server error"
-  /signed-credentials/{credentialId}:
+            $ref: '#/definitions/CredentialsResponse'
+        '500':
+          description: Internal server error
+  /signed-credentials:
     get:
       tags:
-        - "TUM Signing Server / Issuer API"
-      summary: "Get already created credential"
-      description: ""
-      operationId: "signedCredential"
+        - TUM Signing Server / Issuer API
+      summary: Get previously created credential
+      description: ''
+      operationId: signedCredential
       produces:
-        - "application/json"
+        - application/json
       parameters:
-        - in: "path"
-          name: "credentialId"
-          type: "string"
+        - in: query
+          name: credentialId
+          type: string
           required: true
-          description: "ID of the credential that is already created."
+          description: ID of the credential that is already created.
       responses:
-        200:
-          description: "Successful operation - returns the credential with the requested ID"
+        '200':
+          description: Successful operation - returns the credential with the requested ID
           schema:
-            $ref: "#/definitions/VerifiableCredential"
-        500:
-          description: "Internal server error"
-  /credentials-for-student/{matNum}:
+            $ref: '#/definitions/VerifiableCredential'
+        '500':
+          description: Internal server error
+  /credentials-for-student:
     get:
       tags:
-        - "TUM Signing Server / Issuer API"
-      summary: "Get all signed credentials for student number"
-      description: ""
-      operationId: "credentialsForStudent"
+        - TUM Signing Server / Issuer API
+      summary: Get all signed credentials for student number
+      description: ''
+      operationId: credentialsForStudent
       produces:
-        - "application/json"
+        - application/json
       parameters:
-        - in: "path"
-          name: "matNum"
-          type: "string"
+        - in: query
+          name: matNum
+          type: string
           required: true
-          description: "Student number."
+          description: Student number.
       responses:
-        200:
-          description: "Successful operation - returns all signed credentials"
+        '200':
+          description: Successful operation - returns all signed credentials
           schema:
-            type: "array"
+            type: array
             items:
-              $ref: "#/definitions/VerifiableCredential"
-        500:
-          description: "Internal server error"
+              $ref: '#/definitions/VerifiableCredential'
+        '500':
+          description: Internal server error
   /verify-credential:
     post:
       tags:
-        - "Verifier API"
-      summary: "Verify a VC"
-      description: ""
-      operationId: "verifyCredential"
+        - Verifier API
+      summary: Verify a VC
+      description: ''
+      operationId: verifyCredential
       consumes:
-        - "multipart/form-data"
+        - multipart/form-data
       produces:
-        - "application/json"
+        - application/json
       parameters:
-        - in: "formData"
-          name: "vc"
-          type: "file"
-          description: "VC that needs to be verified"
+        - in: formData
+          name: vc
+          type: file
+          description: VC that needs to be verified
           required: true
       responses:
-        200:
-          description: "Successful operation - will return true or false depending if the credential is verified"
+        '200':
+          description: >-
+            Successful operation - will return true or false depending if the
+            credential is verified
           schema:
-            type: "object"
+            type: object
             properties:
               verified:
-                type: "boolean"
-        500:
-          description: "Internal server error"
+                type: boolean
+        '500':
+          description: Internal server error
           schema:
-            $ref: "#/definitions/verifyCredentialError"
+            $ref: '#/definitions/verifyCredentialError'
 definitions:
-  VerifiableCredential:
-    type: "object"
+  UnsignedCredential:
+    type: object
     properties:
       id:
-        type: "string"
-        example: "https://example.com/credentials/1872"
+        type: string
+        example: '6035374709d645001efe36c7'
       context:
-        type: "array"
+        type: array
         items:
-          type: "string"
+          type: string
         example:
-          - "https://www.w3.org/2018/credentials/v1"
-          - "https://www.w3.org/2018/credentials/examples/v1"
+          - 'https://www.w3.org/2018/credentials/v1'
+          - 'https://www.w3.org/2018/credentials/examples/v1'
       type:
-        type: "array"
+        type: array
         items:
-          type: "string"
+          type: string
         example:
-          - "VerifiableCredential"
-          - "DegreeCredential"
+          - VerifiableCredential
+          - DegreeCredential
       issuer:
-        type: "string"
-        example: "did:tls:tum.de"
+        type: string
+        example: 'did:tls:tum.de'
       issuanceDate:
-        type: "string"
-        example: "2010-01-01T19:23:24Z"
+        type: string
+        example: '2010-01-01T19:23:24Z'
       credentialSubject:
-        type: "object"
-        example: {
-          "alumniOf": "Technische Universität München",
-          "grade": "1,0",
-          "degreeType": "bachelor"
-        }
+        type: object
+        example: {}
+    xml:
+      name: UnsignedCredential
+  VerifiableCredential:
+    type: object
+    properties:
+      id:
+        type: string
+        example: '6035374709d645001efe36c7'
+      context:
+        type: array
+        items:
+          type: string
+        example:
+          - 'https://www.w3.org/2018/credentials/v1'
+          - 'https://www.w3.org/2018/credentials/examples/v1'
+      type:
+        type: array
+        items:
+          type: string
+        example:
+          - VerifiableCredential
+          - DegreeCredential
+      issuer:
+        type: string
+        example: 'did:tls:tum.de'
+      issuanceDate:
+        type: string
+        example: '2010-01-01T19:23:24Z'
+      credentialSubject:
+        type: object
+        example:
+          givenName: Michael
+          familyName: Meier
+          dateOfBirth: 01.01.2000
+          degreeProgramme: Informatics
+          degreeType: graduate
+          alumniOf: TU München
+          graduationDate: 01-06-2020
+          universityCity: Munich
+          universityCountry: Germany
       proof:
-        type: "object"
+        type: object
         example:
           - type: Ed25519Signature2018
             created: '2020-12-15T11:07:10Z'
-            jws: eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..kSp-z5 -cU3mxdJUJaDX_5xOHGF66nd2X9wdAisKMNH1OIlueXcKjO6TFDKrNHa3PIyRZMaTQ6TtZgIQ0mx7YAg
+            jws: >-
+              eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..kSp-z5
+              -cU3mxdJUJaDX_5xOHGF66nd2X9wdAisKMNH1OIlueXcKjO6TFDKrNHa3PIyRZMaTQ6TtZgIQ0mx7YAg
             proofPurpose: assertionMethod
-            verificationMethod: 'did:tum'
+            verificationMethod: 'did:tls:tum.de#CYmE2cNh6v5rE7n6XLyvuzH1Saw6MH4XMLDdGeohfia7'
     xml:
-      name: "VerifiableCredential"
+      name: VerifiableCredential
   verifyCredentialError:
-    type: "object"
+    type: object
     properties:
       valid:
-        type: "boolean"
+        type: boolean
         example: false
       error:
-        type: "string"
-        example: "Proof Missing in the Credential"
+        type: string
+        example: Proof Missing in the Credential
   DidResponse:
-    type: "object"
+    type: object
     properties:
       id:
-        type: "string"
+        type: string
       address:
-        type: "string"
+        type: string
       didDocument:
-        type: "object"
+        type: object
         properties:
-          "@context":
-            type: "string"
+          '@context':
+            type: string
           id:
-            type: "string"
+            type: string
           service:
-            type: "array"
+            type: array
             items:
-              type: "object"
+              type: object
               properties:
                 id:
-                  type: "string"
+                  type: string
                 type:
-                  type: "string"
+                  type: string
                 serviceEndpoint:
-                  type: "string"
+                  type: string
           assertionMethod:
-            type: "array"
+            type: array
             items:
-              type: "object"
+              type: object
               properties:
                 id:
-                  type: "string"
+                  type: string
                 type:
-                  type: "string"
+                  type: string
                 controller:
-                  type: "string"
+                  type: string
                 publicKeyBase58:
-                  type: "string"
+                  type: string
     example:
-      id: "did:tls:tum.de"
-      address: "0x492140a461075F183556A6C9f718DF6e4df2f977"
+      id: 'did:tls:tum.de'
+      address: '0x492140a461075F183556A6C9f718DF6e4df2f977'
       didDocument:
-        "@context": "https://www.w3.org/ns/did/v1"
-        id: "did:tls:tum.de"
+        '@context': 'https://www.w3.org/ns/did/v1'
+        id: 'did:tls:tum.de'
         service:
-          - id: "did:tls:tum.de#vcs"
-            type: "VerifiableCredentialService"
-            serviceEndpoint: "http://localhost:9004"
+          - id: 'did:tls:tum.de#vcs'
+            type: VerifiableCredentialService
+            serviceEndpoint: 'http://localhost:9004'
         assertionMethod:
-          - id: "did:tls:tum.de#keys-1"
-            controller: "did:tls:tum.de"
-            publicKeyBase58: "E4tGev3GUgzsXZ6sJpSa259Y16gmW6zpNHESTtJGvVCb"
+          - id: 'did:tls:tum.de#keys-1'
+            controller: 'did:tls:tum.de'
+            publicKeyBase58: E4tGev3GUgzsXZ6sJpSa259Y16gmW6zpNHESTtJGvVCb
     xml:
-      name: "DidResponse"
+      name: DidResponse
   CredentialRequest:
-    type: "object"
+    type: object
     properties:
       domain:
-        type: "string"
-        example: "tum.de"
+        type: string
+        example: tum.de
       matNum:
-        type: "string"
-        example: "123456"
+        type: string
+        example: '1234567'
       credentialType:
-        type: "string"
-        example: "degree"
+        type: string
+        example: degree
       credentialSubject:
-        type: "object"
+        type: object
         properties:
-          givenName: 
-            type: "string"
-            example: "Michael"
+          givenName:
+            type: string
+            example: Michael
           familyName:
-            type: "string"
-            example: "Meier"
+            type: string
+            example: Meier
           dateOfBirth:
-            type: "string"
-            example: "01.01.2000"
-          alumniOf:
-            type: "string"
-            example: "TU München"
+            type: string
+            example: 01.01.2000
           degreeProgramme:
-            type: "string"
-            example: "Information Systems"
+            type: string
+            example: Informatics
+          degreeType: 
+            type: string
+            example: graduate
+          alumniOf:
+            type: string
+            example: TU München
+          graduationDate:
+            type: string
+            example: 01-06-2020
+          universityCity:
+            type: string
+            example: Munich
+          universityCountry:
+            type: string
+            example: Germany
     xml:
-      name: "CredentialRequest"
+      name: CredentialRequest
   CredentialsResponse:
     type: array
     items:
-      type: "object"
+      type: object
       properties:
         _id:
-          type: "string"
-          example: "5ffadd9f553909d75cd3006f"
+          type: string
+          example: 5ffadd9f553909d75cd3006f
         type:
-          type: "string"
-          example: "degree"
-        name: 
-          type: "string"
-          example: "Bachelor's Degree"
-        requiredSubjectProperties: 
-          type: "array"
+          type: string
+          example: degree
+        name:
+          type: string
+          example: Bachelor's Degree
+        requiredSubjectProperties:
+          type: array
+          items: 
+            type: string
+            example: givenName
+        optionalSubjectProperties:
+          type: array
           items:
-            type: "string"
-            example: "givenName"
-        optionalSubjectProperties: 
-          type: "array"
-          items:
-            type: "string"
-            example: "grade"
+            type: string
+            example: grade
         credentialBody:
-          type: "array"
+          type: array
           items:
-            $ref: "#/definitions/VerifiableCredential"
+            $ref: '#/definitions/UnsignedCredential'
     xml:
-      name: "CredentialsResponse"
+      name: CredentialsResponse
+  SingleCredentialResponse:
+    type: object
+    properties:
+      _id:
+        type: string
+        example: 5ffadd9f553909d75cd3006f
+      type:
+        type: string
+        example: degree
+      name:
+        type: string
+        example: Bachelor's Degree
+      requiredSubjectProperties:
+        type: array
+        items:
+          type: string
+          example: givenName
+      optionalSubjectProperties:
+        type: array
+        items:
+          type: string
+          example: grade
+      credentialBody:
+        type: array
+        items:
+          $ref: '#/definitions/UnsignedCredential'
+    xml:
+      name: CredentialsResponse
   CredentialId:
-    type: "object"
+    type: object
     properties:
       credential-id:
-        type: "string"
+        type: string
     xml:
-      name: "CredentialId"
+      name: CredentialId
 externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
